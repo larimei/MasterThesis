@@ -1,7 +1,10 @@
 class OptimizationAgent:
+
+
     def generate_proposal(self):
         # Generate new (w, b) based on current model output
         # Example: random or heuristic generation
+          
         pass
 
     def verify_proposal(self, proposal):
