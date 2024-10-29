@@ -18,15 +18,19 @@ import functools
 def main(_):
 
     # ============== set optimization experiment configurations ================
-    num_points = 50  # number of points in linear regression
-    w_true = 15  # the true w
-    b_true = 14  # the true b
-    max_num_steps = 5  # the number of optimization steps
-    num_reps = 5  # the number of repeated runs
-    max_num_pairs = 20  # the maximum number of input-output pairs in meta-prompt
-    num_input_decimals = 0  # num of decimals for input values in meta-prompt
-    num_output_decimals = 0  # num of decimals for output values in meta-prompt
-    num_generated_points_in_each_step = 8
+
+    configurations = {
+        "num_points": 50,  # number of points in linear regression
+        "w_true": 15,  # the true w
+        "b_true": 14,  # the true b
+        "max_num_steps": 5,  # the number of optimization steps
+        "num_reps": 5,  # the number of repeated runs
+        "max_num_pairs": 20,  # the maximum number of input-output pairs in meta-prompt
+        "num_input_decimals": 0,  # num of decimals for input values in meta-prompt
+        "num_output_decimals": 0,  # num of decimals for output values in meta-prompt
+        "num_generated_points_in_each_step": 8
+    }
+    
 
     # ================ load LLM settings =================== //TODO mehr Settings
     optimizer_llm_name = "llama3.1"  
@@ -71,6 +75,8 @@ def main(_):
     print(f"optimizer test output: {optimizer_test_output}")
     print("Finished testing the optimizer server.")
     print("\n=================================================")
+
+    # ====================== creating seeveral agents ============================
 
     
     agents = {
