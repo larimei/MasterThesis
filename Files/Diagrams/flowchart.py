@@ -15,7 +15,7 @@ flowchart_cot_opro.node('SelectBest', 'ReasonerAgent: select_best_proposal(propo
 flowchart_cot_opro.node('Explain', 'ReasonerAgent: explain_decision()\nExplains decision for final (w, b)', shape='box')
 flowchart_cot_opro.node('LogProcess', 'ReasonerAgent: log_decision_process()\nLogs process and final decision', shape='box')
 
-flowchart_cot_opro.node('CheckLoop', 'Continue Process?\nAdditional gen_meta_prompt required?', shape='diamond')
+flowchart_cot_opro.node('CheckLoop', 'Continue Process?\nAdditional gen_meta_prompt required? > number of runs', shape='diamond')
 flowchart_cot_opro.node('End', 'End Chain of Thought Process', shape='ellipse')
 
 flowchart_cot_opro.edge('Start', 'GenProposal')
