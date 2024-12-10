@@ -1,8 +1,0 @@
-# MasterThesis
-
-
-In recent years, large language models (LLMs) have demonstrated remarkable capabilities in various areas, including natural language processing and generation. This master's thesis explores the innovative application of LLMs as optimizers in complex problem-solving scenarios. The main objective is to develop an LLM-based optimizer that can effectively communicate with users, explaining its steps and justifying its solutions. This interactive optimization framework aims to promote transparency and user engagement by allowing users to actively influence the optimization process through feedback and the definition of additional constraints.
-
-The proposed system leverages the natural language understanding of LLMs to interpret user input and adjust the optimization accordingly. By incorporating user feedback, the optimizer can refine its approach and ensure that the solutions closely align with the users' expectations and specific requirements. This dynamic interaction not only enhances the accuracy and relevance of the solutions but also creates a collaborative environment where users can gain insights into the optimization process.
-
-The expected outcome of this research is a transparent, interactive optimization tool that empowers users to actively participate in the optimization process. This tool is intended to be particularly useful in areas that require complex decision-making and problem-solving, where user intuition and expertise can significantly enhance the effectiveness of automated optimization algorithms. Through this study, we aim to bridge the gap between advanced computational optimization techniques and user-centered design, contributing to the development of more intuitive and responsive AI systems.

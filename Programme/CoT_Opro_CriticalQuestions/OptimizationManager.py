@@ -168,13 +168,32 @@ class OptimizationManager:
                 # evaluate the values of proposed and rounded outputs
                 single_step_values = []
                 for w, b in rounded_outputs:
-                    if w == self.w_true and b == self.b_true:
-                        found_optimal = True
-                    z = self.agents['OptimizationAgent'].evaluate_loss(X, y, w, b)
-                    single_step_values.append(z)
-                    old_value_pairs_set.add((w, b, z))
-                    old_value_pairs_with_i_step.append((w, b, z, i_step))
-                print(f"single_step_values: {single_step_values}")
+
+                     # Schritt 2: Kritische Fragen stellen
+                    for proposal in parsed_outputs:
+                        critical_questions = self.agents['VerifierAgent'].ask_critical_questions(proposal)
+                        critical_answers = [self.call_optimizer_server_func(q) for q in critical_questions]
+
+                        # Schritt 3: Entscheidung treffen
+                        decision = self.agents['VerifierAgent'].reject_or_accept(proposal, critical_answers)
+                        explanation = self.agents['ReasonerAgent'].resolve_conflicts(critical_questions, critical_answers)
+                        decision_explanation = self.agents['ReasonerAgent'].explain_decision(explanation, proposal)
+
+                        # Schritt 4: Speichern der Erklärung
+                        self.log_explanation(i_step, proposal, decision_explanation)
+
+                        if decision == "accept":
+                            # Bewerten und zum Wertpaarsatz hinzufügen
+                            w, b = proposal
+                            z = self.agents['OptimizationAgent'].evaluate_loss(X, y, w, b)
+                            old_value_pairs_set.add((w, b, z))
+                            if w == self.w_true and b == self.b_true:
+                                found_optimal = True
+                            z = self.agents['OptimizationAgent'].evaluate_loss(X, y, w, b)
+                            single_step_values.append(z)
+                            old_value_pairs_set.add((w, b, z))
+                            old_value_pairs_with_i_step.append((w, b, z, i_step))
+                        print(f"single_step_values: {single_step_values}")
 
 
                 # ====================== save results ============================
@@ -199,5 +218,10 @@ class OptimizationManager:
       
 
     def log_explanation(self, step, proposal, explanation):
-        # Log each step's explanation for transparency
-        pass
+        log_entry = {
+            "step": step,
+            "proposal": proposal,
+            "explanation": explanation
+        }
+        with open("explanations.json", "a") as f:
+            f.write(json.dumps(log_entry, indent=4) + "\n")
