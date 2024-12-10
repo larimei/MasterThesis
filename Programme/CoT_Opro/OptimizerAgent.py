@@ -1,12 +1,13 @@
+import re
 import numpy as np
 
 class OptimizationAgent:
 
-    def evaluate_loss(X, y, w, b):
+    def evaluate_loss(self, X, y, w, b):
         residual = y - (X * w + b)
         return np.linalg.norm(residual) ** 2
     
-    def gen_meta_prompt(old_value_pairs_set, num_input_decimals=5, num_output_decimals=5, max_num_pairs=100):
+    def gen_meta_prompt(self, old_value_pairs_set, num_input_decimals=5, num_output_decimals=5, max_num_pairs=100):
         old_value_pairs_set = set(
             [
                 (
@@ -41,7 +42,7 @@ class OptimizationAgent:
         """.strip()
         return meta_prompt
     
-    def parse_output(extracted_output):
+    def parse_output(self, extracted_output):
 
         if not extracted_output:
             return
@@ -52,6 +53,17 @@ class OptimizationAgent:
             extracted_values.append(item.strip())
         parsed_output = np.array(extracted_values).astype(float)
         return parsed_output
+    
+    def extract_string_in_square_brackets(self, input_string):
+        raw_result = re.findall(r"\[.*?\]", input_string)
+        if raw_result:
+            for pair in raw_result[::-1]:
+                if "=" not in pair and ("w" in pair or "b" in pair):
+                    continue
+                return pair[1:-1]
+            return ""
+        else:
+            return ""
 
 
     def verify_proposal(self, proposal):

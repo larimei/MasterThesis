@@ -1,11 +1,16 @@
 # Instantiate agents and run the CoT process
-from Programme.CoT_Opro import ChainOfThoughtManager, VerifierAgent, prompt_utils
-from Programme.CoT_Opro.OptimizerAgent import OptimizationAgent
-from Programme.CoT_Opro.ReasonerAgent import ReasonerAgent
-
-
 import os
 import sys
+
+r"""Optimize over the objective function of a linear regression problem.
+
+Usage:
+
+```
+python Programme\CoT_Opro\CoT.py
+```
+"""
+
 
 ROOT_PATH = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -15,7 +20,13 @@ sys.path.insert(0, ROOT_PATH)
 import datetime
 import functools
 
-def main(_):
+from Programme.CoT_Opro import prompt_utils
+from Programme.CoT_Opro.OptimizerAgent import OptimizationAgent
+from Programme.CoT_Opro.VerifierAgent import VerifierAgent
+from Programme.CoT_Opro.ReasonerAgent import ReasonerAgent
+from Programme.CoT_Opro.OptimizationManager import OptimizationManager
+
+def main():
 
     # ============== set optimization experiment configurations ================
 
@@ -84,9 +95,9 @@ def main(_):
         'VerifierAgent': VerifierAgent(),
         'ReasonerAgent': ReasonerAgent()
     }
-    chain_manager = ChainOfThoughtManager(agents)
-    chain_manager.run_chain_of_thought()
+    chain_manager = OptimizationManager(agents, configurations, optimizer_llm_dict ,call_optimizer_server_func)
+    chain_manager.run_optimization()
 
 
 if __name__ == "__main__":
-    main()
+  main()
