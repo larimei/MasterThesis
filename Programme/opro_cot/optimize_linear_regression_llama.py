@@ -1,30 +1,26 @@
-# Copyright 2023 The OPRO Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-r"""Optimize over the objective function of a linear regression problem.
+# Diplomacy Contract Optimization using LLMs
+# This script iteratively optimizes strategies in a Diplomacy context by interacting with an LLM.
 
-Usage:
+import os
+import re
+import json
+import datetime
+from typing import List, Dict
+import functools
+import numpy as np
 
-```
-python Programme/opro_cot/optimize_linear_regression_llama.py"
-```
+# Import LLM utilities (adapt this to your environment)
+from Programme.opro import prompt_utils_llama
 
-Note:
-- When using a Google-Cloud-served model (like text-bison at
-https://developers.generativeai.google/tutorials/text_quickstart), add
-`--palm_api_key="<your_key>"`
-- When using an OpenAI model, add `--openai_api_key="<your_key>"`
-"""
+# Global configurations
+SAVE_FOLDER = "outputs/diplomacy_results"
+LLM_MODEL = "llama3.1"
+MAX_ITERATIONS = 5  # Number of optimization iterations
+TEMPERATURE = 1.0
+MAX_DECODE_STEPS = 1024
+
+# Ensure the output folder exists
+os.makedirs(SAVE_FOLDER, exist_ok=True)
 
 import datetime
 import functools
