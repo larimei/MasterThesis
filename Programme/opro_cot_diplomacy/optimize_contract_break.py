@@ -43,7 +43,7 @@ def initialize_llm_call():
 # Function to generate a meta-prompt
 def generate_meta_prompt(history: str, strength_a: float, strength_b: float, potential_gain: float, 
                         updated: bool = False, previous_likelihood: str = "", 
-                        previous_reasoning: str = "", previous_strategy: str = "", iteration: int = 0) -> str:
+                        previous_reasoning: str = "", iteration: int = 0) -> str:
     """
     Creates a meta-prompt for the LLM based on the current game state.
 
@@ -51,7 +51,7 @@ def generate_meta_prompt(history: str, strength_a: float, strength_b: float, pot
     """
     base_prompt = f"""
 Player A and Player B are participating in a game of Diplomacy. 
-Player A has promised Player B support in the next move. However, Player A might gain more by breaking the agreement. Your task is to analyze this situation and provide two key outputs: the likelihood of Player A breaking the agreement and a recommended strategy for Player B to respond effectively.
+Player A has promised Player B support in the next move. However, Player A might gain more by breaking the agreement. Your task is to analyze this situation and provide the likelihood of Player A breaking the agreement.
 The scenario is as follows: Player A's strength is {strength_a}, representing their strategic or military advantage. Player B's strength is {strength_b}, indicating their current standing in the game. {history} If Player A breaks the agreement, they gain an immediate advantage quantified as {potential_gain}. 
 However, breaking the agreement could also result in risks such as retaliation or loss of trust. Assume Player A acts rationally and strategically, weighing both the potential gains and risks of breaching the contract.
 
@@ -64,8 +64,8 @@ Based on the likelihood of a breach, suggest a strategy for Player B. This strat
 Ensure your response includes the following sections exactly as written without any other special characters:
 - "Likelihood of Breach: [percentage as whole numbers]%"
 - "Reasoning: [Your detailed explanation in complete sentences]"
-- "Recommended Strategy: [Your detailed strategy explanation in complete sentences]"
-- "Chain of Thought Explanation: [A detailed step-by-step explanation of how you arrived at your reasoning and refined likelihood.]"
+- "Chain of Thought Explanation: [A detailed step-by-step explanation of how you arrived at your reasoning and refined likelihood. Also explain why you chose the method to get to this solution.]"
+
 
 Your response must follow this format exactly, so the information can be parsed and processed for further analysis.
     """
@@ -76,12 +76,10 @@ Your response must follow this format exactly, so the information can be parsed 
 In the previous iteration (Iteration {iteration}), the following analysis was provided:
 - Likelihood of Breach: {previous_likelihood}%
 - Reasoning: {previous_reasoning}
-- Strategy: {previous_strategy}
 
 Now, refine this analysis based on the following:
 1. Review the previous reasoning step by step. Identify weaknesses or gaps in the explanation and improve it.
-2. Provide a more precise Likelihood of Breach by incorporating any new insights or better evaluations.
-3. Suggest a new or improved strategy for Player B to address the refined likelihood and reasoning.
+2. Provide a more precise Likelihood of Breach by incorporating any new insights or better evaluations. You can increase, decrease or stabilize the likelihood to get near a perfect solution.
 
 Your task in this iteration is to critically evaluate this estimate. Consider factors that may increase, decrease, or stabilize the likelihood. 
 Your analysis should balance these factors and aim to refine the likelihood to approach an optimal and realistic value. This means the likelihood can remain the same, increase, or decrease, depending on the insights gained.
@@ -94,19 +92,21 @@ Your analysis should balance these factors and aim to refine the likelihood to a
 # Function to parse LLM response
 def parse_llm_response(response: str) -> Dict[str, str]:
     """
-    Extracts relevant information (likelihood and strategy) from the LLM's response.
+    Extracts relevant information from the LLM's response.
     """
     likelihood_match = re.search(r"Likelihood of Breach:\s*\*{0,2}\s*(\d+)", response)
     likelihood = likelihood_match.group(1) if likelihood_match else "Unknown"
 
-    reasoning_match = re.search(r"Reasoning:\s*(.+?)(?=Recommended Strategy:|$)", response, re.DOTALL)
+    reasoning_match = re.search(r"Reasoning:\s*(.+?)(?=Chain of Thought Explanation::|$)", response, re.DOTALL)
     reasoning = reasoning_match.group(1).strip() if reasoning_match else None
 
-    strategy_match = re.search(r"Strategy:\s*(.+)", response, re.DOTALL)
-    strategy = strategy_match.group(1).strip() if strategy_match else "No strategy provided"
+    cot_explanation_match = re.search(r"Chain of Thought Explanation:\s*(.+?)(?=Recommended Strategy:|$)", response, re.DOTALL)
+    cot_explanation = cot_explanation_match.group(1).strip() if cot_explanation_match else None
+
+  
 
 
-    return {"likelihood": likelihood, "reasoning": reasoning, "strategy": strategy}
+    return {"likelihood": likelihood, "reasoning": reasoning, "cot_explanation": cot_explanation}
 
 # Function to save results
 def save_results(results: List[Dict], folder: str):
@@ -134,16 +134,15 @@ def optimize_contract_breaking(initial_params: Dict):
     # Initial Werte für die erste Iteration
     previous_likelihood = "Unknown"
     previous_reasoning = "No reasoning yet."
-    previous_strategy = "No strategy yet."
 
     for iteration in range(MAX_ITERATIONS):
         print(f"\n=== Iteration {iteration + 1} ===")
         
         # Generate meta-prompt with previous results
         if iteration == 0:
-            meta_prompt = generate_meta_prompt(history, strength_a, strength_b, potential_gain, False, previous_likelihood, previous_reasoning, previous_strategy, iteration)
+            meta_prompt = generate_meta_prompt(history, strength_a, strength_b, potential_gain, False, previous_likelihood, previous_reasoning, iteration)
         else:
-            meta_prompt = generate_meta_prompt(history, strength_a, strength_b, potential_gain, True, previous_likelihood, previous_reasoning, previous_strategy, iteration)
+            meta_prompt = generate_meta_prompt(history, strength_a, strength_b, potential_gain, True, previous_likelihood, previous_reasoning, iteration)
 
         # Call LLM
         print(f"Prompt sent to LLM:\n{meta_prompt}\n")
@@ -154,7 +153,7 @@ def optimize_contract_breaking(initial_params: Dict):
         parsed_response = parse_llm_response(raw_response)
         likelihood = parsed_response["likelihood"]
         reasoning = parsed_response["reasoning"]
-        strategy = parsed_response["strategy"]
+        cot_explanation = parsed_response["cot_explanation"]
 
         # Append to results
         results.append({
@@ -163,20 +162,78 @@ def optimize_contract_breaking(initial_params: Dict):
             "response": raw_response,
             "likelihood": likelihood,
             "reasoning": reasoning,
-            "strategy": strategy
+            "cot_explanation": cot_explanation
         })
 
         # Update parameters for the next iteration
         previous_likelihood = likelihood
         previous_reasoning = reasoning
-        previous_strategy = strategy
 
     # Save results
     save_results(results, SAVE_FOLDER)
 
+
+
+def evaluate_explanation(likelihood: str, reasoning: str, cot: str) -> float:
+    """
+    Evaluates the quality of an explanation based on logic, completeness, and relevance.
+
+    Parameters:
+        likelihood (str): The likelihood value provided by the explanation.
+        reasoning (str): The reasoning section of the explanation.
+        cot (str): The cot section of the explanation.
+
+    Returns:
+        float: A score representing the quality of the explanation.
+    """
+    score = 0
+
+    # Check logic and coherence of reasoning
+    if "strength" in reasoning and "retaliation" in reasoning:
+        score += 3  # Reward explanations that mention key factors
+    if "historical cooperation" in reasoning:
+        score += 2  # Reward for considering trust/history
+    if len(reasoning.split()) > 100:  # Reasoning should be detailed
+        score += 1
+
+    # Reward explanations that balance likelihood
+    likelihood_value = int(likelihood)
+    if 40 <= likelihood_value <= 80:  # Penalize extreme likelihoods
+        score += 2
+
+    return score
+
+def select_best_explanation(explanations):
+    """
+    Selects the best explanation from a list of explanations based on their scores.
+
+    Parameters:
+        explanations (list of dict): Each explanation contains likelihood, reasoning, and strategy.
+
+    Returns:
+        dict: The explanation with the highest score.
+    """
+    best_score = -1
+    best_explanation = None
+
+    for explanation in explanations:
+        score = evaluate_explanation(
+            explanation["likelihood"],
+            explanation["reasoning"],
+            explanation["strategy"]
+        )
+        if score > best_score:
+            best_score = score
+            best_explanation = explanation
+
+    print(best_explanation)
+
+    return best_explanation
+
+
 # Entry point
-if __name__ == "__main__":
-    # Initial parameters
+#if __name__ == "__main__":
+    # Initial parameters, how many controlpoints
     initial_params = {
         "strength_a": 8.0,
         "strength_b": 5.5,

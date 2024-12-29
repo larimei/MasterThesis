@@ -9,8 +9,7 @@ from typing import List, Dict
 import functools
 import numpy as np
 
-# Import LLM utilities (adapt this to your environment)
-from Programme.opro import prompt_utils_llama
+
 
 # Global configurations
 SAVE_FOLDER = "outputs/diplomacy_results"
@@ -34,7 +33,8 @@ OPRO_ROOT_PATH = os.path.dirname(
 )
 sys.path.insert(0, OPRO_ROOT_PATH)
 
-from Programme.opro import prompt_utils_llama
+# Import LLM utilities (adapt this to your environment)
+import Programme.prompt_utils_llama as prompt_utils_llama
 from absl import app
 from absl import flags
 import numpy as np
