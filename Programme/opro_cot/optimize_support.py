@@ -16,10 +16,10 @@ OPRO_ROOT_PATH = os.path.dirname(
 sys.path.insert(0, OPRO_ROOT_PATH)
 
 # Import LLM utilities (adapt this to your environment)
-import Programme.prompt_utils_llama as prompt_utils_llama
+import Programme.opro_cot_diplomacy.diplomacy_simulation.prompt_utils_llama as prompt_utils_llama
 
 # Global configurations
-SAVE_FOLDER = "Programme/outputs/diplomacy_results"
+SAVE_FOLDER = "Programme/outputs/diplomacy_results/support"
 LLM_MODEL = "llama3.1"
 MAX_ITERATIONS = 10  # Number of optimization iterations
 TEMPERATURE = 1.0

@@ -38,7 +38,7 @@ OPRO_ROOT_PATH = os.path.dirname(
 )
 sys.path.insert(0, OPRO_ROOT_PATH)
 
-import Programme.prompt_utils_llama as prompt_utils_llama
+import Programme.opro_cot_diplomacy.diplomacy_simulation.prompt_utils_llama as prompt_utils_llama
 from absl import app
 from absl import flags
 import numpy as np

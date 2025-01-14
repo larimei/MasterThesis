@@ -15,8 +15,7 @@ OPRO_ROOT_PATH = os.path.dirname(
 )
 sys.path.insert(0, OPRO_ROOT_PATH)
 
-# Import LLM utilities (adapt this to your environment)
-import Programme.prompt_utils_llama as prompt_utils_llama
+import Programme.opro_cot_diplomacy.diplomacy_simulation.prompt_utils_llama as prompt_utils_llama
 
 # Global configurations
 SAVE_FOLDER = "Programme/outputs/diplomacy_results"
@@ -57,7 +56,7 @@ Based on the likelihood of a breach, suggest a strategy for Player B. This strat
 Ensure your response includes the following sections exactly as written without any other special characters:
 - "Likelihood of Breach: [percentage as whole numbers]%"
 - "Reasoning: [Your detailed explanation in complete sentences]"
-- "Chain of Thought Explanation: [A detailed step-by-step explanation of how you arrived at your reasoning and refined likelihood. Also explain why you chose the method to get to this solution.]"
+- "Chain of Thought Explanation: [A detailed step-by-step explanation of how you arrived at your reasoning and refined likelihood. Also explain why you chose the method to get to this solution and explain your decision making process.]"
 
 
 Your response must follow this format exactly, so the information can be parsed and processed for further analysis.
@@ -90,7 +89,7 @@ def parse_llm_response(response: str) -> Dict[str, str]:
     reasoning_match = re.search(r"Reasoning:\s*(.+?)(?=Chain of Thought Explanation::|$)", response, re.DOTALL)
     reasoning = reasoning_match.group(1).strip() if reasoning_match else None
 
-    cot_explanation_match = re.search(r"Chain of Thought Explanation:\s*(.+?)", response, re.DOTALL)
+    cot_explanation_match = re.search(r"Chain of Thought Explanation:\s*(.+)", response, re.DOTALL)
     cot_explanation = cot_explanation_match.group(1).strip() if cot_explanation_match else None
 
     return {"likelihood": likelihood, "reasoning": reasoning, "cot_explanation": cot_explanation}
@@ -192,17 +191,14 @@ def ask_llm_to_evaluate(llm, explanation):
     1. Kohärenz: Ist die Argumentation logisch und schlüssig?
     2. Vollständigkeit: Werden alle relevanten Aspekte wie Risiken, Vorteile und Szenarien berücksichtigt?
     3. Tiefe der Analyse: Geht die Analyse über oberflächliche Betrachtungen hinaus?
-    4. Praktikabilität der Strategie: Ist die vorgeschlagene Strategie umsetzbar und auf das Szenario abgestimmt?
 
     Bewerte jeden Punkt auf einer Skala von 1 (sehr schlecht) bis 5 (sehr gut). Begründe kurz deine Bewertung für jedes Kriterium.
     """
-    response = llm(prompt)  # Hier würde dein LLM wie GPT genutzt
+    response = llm(prompt) 
     return response
 
 
-# Entry point
 if __name__ == "__main__":
-    # Initial parameters, how many controlpoints
     initial_params = {
         "strength_a": 8.0,
         "strength_b": 5.0,
