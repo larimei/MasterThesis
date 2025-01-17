@@ -1,0 +1,479 @@
+{
+  "id": "Sjltvga2dzOB",
+  "is_full_press": true,
+  "map": "standard",
+  "metadata": {
+    "phase_minutes": "5"
+  },
+  "phases": [
+    {
+      "logs": [],
+      "messages": [
+        {
+          "message": "Hey Italy, any interest in keeping Tyrolia as a DMZ? Would you be down for a Lepanto?",
+          "phase": "S1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180308900
+        },
+        {
+          "message": "Hey Turkey! How would you like to ally against Russia with me? We can split up the Balkans with Gre/ser for me and Rum/bul for you.",
+          "phase": "S1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180309000
+        },
+        {
+          "message": "Hey Russia!\nI really like AR, and I find it's much better than the RT or AT. Would you be down to take out Turkey together? Would you like to start by bouncing in Galicia?",
+          "phase": "S1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180309100
+        },
+        {
+          "message": "Hi France! Would you be open to potentially attacking Italy early?",
+          "phase": "S1901M",
+          "recipient": "FRANCE",
+          "sender": "AUSTRIA",
+          "time_sent": 166180309200
+        },
+        {
+          "message": "Hey Germany, any chance you'd be willing to open to Denmark and tell Russia you'll bounce them out of Sweden if they move to Galicia?",
+          "phase": "S1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180309300
+        },
+        {
+          "message": "Hi England! Since we don't share a border, but have some common neighbors, do you think we could share information? If you want to head north early, I'd be down to see if we can work together on Russia.",
+          "phase": "S1901M",
+          "recipient": "ENGLAND",
+          "sender": "AUSTRIA",
+          "time_sent": 166180309800
+        },
+        {
+          "message": "That sounds like a great plan to me. ",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180310300
+        },
+        {
+          "message": "Yeah that sounds great! I think A/I is a super strong alliance",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ITALY",
+          "time_sent": 166180310600
+        },
+        {
+          "message": "Hi there! Let me think about it!",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "GERMANY",
+          "time_sent": 166180310700
+        },
+        {
+          "message": "Are you worried about Italy at all?",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180311500
+        },
+        {
+          "message": "Yes I love AR. I could bounce in Gal, but how about a DMZ?",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180311501
+        },
+        {
+          "message": "Thanks! Any chance we could also work together more closely? Would you be willing to share information with me, since we have common neighbors in Russia and Italy?",
+          "phase": "S1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180312800
+        },
+        {
+          "message": "Awesome! Do you think you'll convoy to Tunis and then to Syria next year? I can take Greece and support you to Aegean if you're doing a Lepanto",
+          "phase": "S1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180312900
+        },
+        {
+          "message": "Awesome. Would you be willing to open to Armenia, Black Sea, and Bulgaria? I can support you to Rum in the fall, and you'll be in a great spot to take Sev next year.",
+          "phase": "S1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180313800
+        },
+        {
+          "message": "Would you like to start by bouncing in Gal?",
+          "phase": "S1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180313801
+        },
+        {
+          "message": "Alright, bounce in Gal",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180315300
+        },
+        {
+          "message": "Hi Aus! I'd like to see how things go on the other fronts first. Have you heard from Germanu?",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "FRANCE",
+          "time_sent": 166180315500
+        },
+        {
+          "message": "Sure thing that sounds good. Have you heard from Russia yet? I haven't!",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "GERMANY",
+          "time_sent": 166180315800
+        },
+        {
+          "message": "That would be perfect. I'll start with a convoy to Tunis",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ITALY",
+          "time_sent": 166180316200
+        },
+        {
+          "message": "Awesome!\nI'm fine with either, but I'd prefer the bounce just because I think it's a stronger move for both of us. Would you be down for that?",
+          "phase": "S1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180317400
+        },
+        {
+          "message": "I have, a little bit. Would you be willing to open to Denmark?",
+          "phase": "S1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180318000
+        },
+        {
+          "message": "Yeah, they've been friendly to me so far. They say they're not planning on heading after you",
+          "phase": "S1901M",
+          "recipient": "FRANCE",
+          "sender": "AUSTRIA",
+          "time_sent": 166180318100
+        },
+        {
+          "message": "That sounds good to me. I'm not yet sure what my plans are with Scandinavia, but I will keep you updated",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ENGLAND",
+          "time_sent": 166180318300
+        },
+        {
+          "message": "Awesome!",
+          "phase": "S1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180318800
+        },
+        {
+          "message": "I will!",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "GERMANY",
+          "time_sent": 166180320100
+        },
+        {
+          "message": "Thanks! Have you heard from Germany? Do you know if they'll open to Denmark?",
+          "phase": "S1901M",
+          "recipient": "ENGLAND",
+          "sender": "AUSTRIA",
+          "time_sent": 166180320600
+        },
+        {
+          "message": "I'll open to Bla and Bul... I might order Smy holds or move to Arm - not sure yet.",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180320800
+        },
+        {
+          "message": "Thanks!",
+          "phase": "S1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180322100
+        },
+        {
+          "message": "Awesome! I would move to Arm, I think it's a stronger opening.",
+          "phase": "S1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180322700
+        },
+        {
+          "message": "It is more aggressive that's for sure.",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180330200
+        },
+        {
+          "message": "Are you opening to Bohemia?",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180330700
+        },
+        {
+          "message": "I'm not too sure about Germany yet. I'll keep you updated",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ENGLAND",
+          "time_sent": 166180331900
+        },
+        {
+          "message": "sure",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180332200
+        },
+        {
+          "message": "Nah, I'm not opening to Boh. I'm opening to Galicia",
+          "phase": "S1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180332900
+        },
+        {
+          "message": "Thanks! If you could leak that you're willing to move to Stp in the fall, that would be awesome",
+          "phase": "S1901M",
+          "recipient": "ENGLAND",
+          "sender": "AUSTRIA",
+          "time_sent": 166180334400
+        },
+        {
+          "message": "that's a shame.",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180336600
+        },
+        {
+          "message": "You should open to Boh",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180337000
+        },
+        {
+          "message": "Okay, I'll think about it and let you know",
+          "phase": "S1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ENGLAND",
+          "time_sent": 166180337001
+        }
+      ],
+      "name": "S1901M",
+      "orders": {
+        "AUSTRIA": [
+          "A VIE - GAL",
+          "F TRI - ALB",
+          "A BUD - SER"
+        ],
+        "ENGLAND": [
+          "F EDI - NTH",
+          "F LON - ENG",
+          "A LVP - YOR"
+        ],
+        "FRANCE": [
+          "F BRE - MAO",
+          "A PAR - PIC",
+          "A MAR H"
+        ],
+        "GERMANY": [
+          "F KIE - DEN",
+          "A MUN - RUH",
+          "A BER - KIE"
+        ],
+        "ITALY": [
+          "F NAP - ION",
+          "A ROM - APU",
+          "A VEN - PIE"
+        ],
+        "RUSSIA": [
+          "F STP/SC - BOT",
+          "A MOS - UKR",
+          "A WAR - GAL",
+          "F SEV - BLA"
+        ],
+        "TURKEY": [
+          "F ANK - BLA",
+          "A SMY H",
+          "A CON - BUL"
+        ]
+      },
+      "results": {},
+      "state": {
+        "builds": {
+          "AUSTRIA": {
+            "count": 0,
+            "homes": []
+          },
+          "ENGLAND": {
+            "count": 0,
+            "homes": []
+          },
+          "FRANCE": {
+            "count": 0,
+            "homes": []
+          },
+          "GERMANY": {
+            "count": 0,
+            "homes": []
+          },
+          "ITALY": {
+            "count": 0,
+            "homes": []
+          },
+          "RUSSIA": {
+            "count": 0,
+            "homes": []
+          },
+          "TURKEY": {
+            "count": 0,
+            "homes": []
+          }
+        },
+        "centers": {
+          "AUSTRIA": [
+            "VIE",
+            "TRI",
+            "BUD"
+          ],
+          "ENGLAND": [
+            "EDI",
+            "LON",
+            "LVP"
+          ],
+          "FRANCE": [
+            "BRE",
+            "PAR",
+            "MAR"
+          ],
+          "GERMANY": [
+            "KIE",
+            "MUN",
+            "BER"
+          ],
+          "ITALY": [
+            "NAP",
+            "ROM",
+            "VEN"
+          ],
+          "RUSSIA": [
+            "STP",
+            "MOS",
+            "WAR",
+            "SEV"
+          ],
+          "TURKEY": [
+            "ANK",
+            "SMY",
+            "CON"
+          ]
+        },
+        "homes": {
+          "AUSTRIA": [
+            "BUD",
+            "TRI",
+            "VIE"
+          ],
+          "ENGLAND": [
+            "EDI",
+            "LON",
+            "LVP"
+          ],
+          "FRANCE": [
+            "BRE",
+            "MAR",
+            "PAR"
+          ],
+          "GERMANY": [
+            "BER",
+            "KIE",
+            "MUN"
+          ],
+          "ITALY": [
+            "NAP",
+            "ROM",
+            "VEN"
+          ],
+          "RUSSIA": [
+            "MOS",
+            "SEV",
+            "STP",
+            "WAR"
+          ],
+          "TURKEY": [
+            "ANK",
+            "CON",
+            "SMY"
+          ]
+        },
+        "name": "S1901M",
+        "retreats": {
+          "AUSTRIA": {},
+          "ENGLAND": {},
+          "FRANCE": {},
+          "GERMANY": {},
+          "ITALY": {},
+          "RUSSIA": {},
+          "TURKEY": {}
+        },
+        "units": {
+          "AUSTRIA": [
+            "A VIE",
+            "F TRI",
+            "A BUD"
+          ],
+          "ENGLAND": [
+            "F EDI",
+            "F LON",
+            "A LVP"
+          ],
+          "FRANCE": [
+            "F BRE",
+            "A PAR",
+            "A MAR"
+          ],
+          "GERMANY": [
+            "F KIE",
+            "A MUN",
+            "A BER"
+          ],
+          "ITALY": [
+            "F NAP",
+            "A ROM",
+            "A VEN"
+          ],
+          "RUSSIA": [
+            "F STP/SC",
+            "A MOS",
+            "A WAR",
+            "F SEV"
+          ],
+          "TURKEY": [
+            "F ANK",
+            "A SMY",
+            "A CON"
+          ]
+        }
+      }
+    }
+  ],
+  "scoring_system": "sum_of_squares",
+  "version": "1.0"
+}
