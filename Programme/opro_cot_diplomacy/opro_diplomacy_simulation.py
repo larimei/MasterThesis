@@ -63,6 +63,75 @@ def generate_optimization_communication_prompt(name, messages):
     Your response must follow this format exactly, so the information can be parsed and processed for further analysis.
         """
 
+def generate_game_summary_prompt(results):
+    phase_summaries = []
+
+    print(results)
+
+    for phase in results:
+        phase_name = phase.get("phase", "Unknown Phase")
+        highlights = "\n".join(phase.get("highlights", []))
+        communication_tips = phase.get("communcation_tips", "")
+        reasoning = phase.get("reasoning", "")
+
+        phase_summaries.append(f"""
+        Phase: {phase_name}
+        Highlights:
+        {highlights}
+
+        Communication Tips:
+        {communication_tips}
+
+        Reasoning:
+        {reasoning}
+        """)
+
+    consolidated_results = "\n\n".join(phase_summaries)
+
+    return f"""
+    You are summarizing a Diplomacy game based on the following phase results:
+
+    {consolidated_results}
+
+    Your task:
+    1. Provide a summary of the overall communication and strategies across all phases.
+    2. Identify key patterns or improvements in the communication process.
+    3. Extract the most impactful highlights that influenced the game's outcome.
+    4. Suggest how these insights could be applied to future games.
+
+    Output format:
+    - Overall Summary: [Your summary of the game's communication and strategies]
+    - Key Patterns: [Patterns or improvements observed across phases]
+    - Impactful Highlights: [Most impactful highlights from the game]
+    - Future Suggestions: [Recommendations for improving communication in similar scenarios]
+    """
+
+def generate_moves_analysis_prompt(messages, actions):
+  
+    actions_summary = "\n".join([f"{player}: {action}" for player, action in actions.items()])
+    messages_summary = "\n".join([f"From {msg['sender']} to {msg['recipient']}: {msg['message']}" for msg in messages])
+
+    return f"""
+    You are analyzing the communication and moves in a Diplomacy game.
+
+    Messages:
+    {messages_summary}
+
+    Player Actions:
+    {actions_summary}
+
+    Your task:
+    1. Analyze how the players' moves align or conflict with their messages.
+    2. Identify discrepancies or consistencies between promises and actions.
+    3. Evaluate how these moves influence trust, strategy, and cooperation for the next phase.
+
+    Output format:
+    - Analysis: [Detailed explanation of the alignment or conflict between messages and moves]
+    - Trust Impact: [How the moves affect trust between players]
+    - Strategic Recommendations: [Recommendations for improving communication and trust in the next phase]
+    """
+
+
 
 def optimize_messages(messages, ask_llm):
     message_results = [] 
@@ -74,7 +143,6 @@ def optimize_messages(messages, ask_llm):
             sender = message.get("sender")
             recipient = message.get("recipient")
             content = message.get("message")
-            print(f"Original Message from {sender} to {recipient}: {content}")
 
             prompt = generate_optimization_message_prompt(sender, recipient, content)
             response = ask_llm(prompt)[0]
@@ -96,45 +164,66 @@ def optimize_messages(messages, ask_llm):
     return message_results
 
 
-def optimize_communication(game_data, ask_llm):
+
+
+def optimize_communication(messages, ask_llm, phase_name):
+
+    #message_results = optimize_messages(messages, ask_llm)
+
+    all_messages = " ".join([
+        f"From {msg['sender']} to {msg['recipient']}: {msg['message']}" 
+        for msg in messages 
+        if isinstance(msg, dict) and "sender" in msg and "recipient" in msg and "message" in msg
+    ])
+
+    prompt = generate_optimization_communication_prompt(phase_name, all_messages)
+    response = ask_llm(prompt)[0]
+    parsed_response = parse_llm_response_communication(response)
+
+    highlights = parsed_response["highlights"]
+    communcation_tips = parsed_response["communcation_tips"]
+    reasoning = parsed_response["reasoning"]
+    new_messages = parsed_response["new_messages"]
+
+
+    return {"phase": phase_name,
+            #"message_results": message_results,
+            "communcation_tips": communcation_tips, 
+            "reasoning": reasoning, 
+            "new_messages": new_messages,
+            "highlights": highlights
+    }
+
+def optimize_communication_moves(game_data, ask_llm):
     all_results = []
 
     for phase in game_data["phases"]:
         phase_name = phase.get("name", "Unknown Phase")
         print(f"Current Phase: {phase_name}")
 
+
         messages = phase.get("messages", [])
+        actions = phase.get("orders", {})
 
-        phase_results = optimize_messages(messages, ask_llm)
 
-        # Extrahiere die relevanten Daten aus den Nachrichten und füge Absender und Empfänger hinzu
-        all_messages = " ".join([
-            f"From {msg['sender']} to {msg['recipient']}: {msg['message']}" 
-            for msg in messages 
-            if isinstance(msg, dict) and "sender" in msg and "recipient" in msg and "message" in msg
-        ])
+        phase_results = optimize_communication(messages, ask_llm, phase_name)
 
-        prompt = generate_optimization_communication_prompt(phase_name, all_messages)
+        prompt = generate_moves_analysis_prompt(messages, actions)
         response = ask_llm(prompt)[0]
-        parsed_response = parse_llm_response_communication(response)
 
-        highlights = parsed_response["highlights"]
-        communcation_tips = parsed_response["communcation_tips"]
-        reasoning = parsed_response["reasoning"]
-        new_messages = parsed_response["new_messages"]
+        parsed_response = parse_llm_response_moves(response)
 
-
-        all_results.append({
-            "phase": phase_name,
-            "phase_results": phase_results,
-            "communcation_tips": communcation_tips, 
-            "reasoning": reasoning, 
-            "new_messages": new_messages,
-            "highlights": highlights
-        })
+        phase_results_moves = {
+            "analysis": parsed_response["analysis"],
+            "trust_impact": parsed_response["trust_impact"],
+            "strategic_recommendations": parsed_response["strategic_recommendations"]
+        }
+        
+        all_results.append({**phase_results_moves, **phase_results})
 
 
     return all_results
+
 
 def parse_llm_response_message(response: str) -> Dict[str, str]:
 
@@ -162,6 +251,44 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
 
     return {"communcation_tips": communication_tips, "reasoning": reasoning, "new_messages": new_messages, "highlights": highlights}
 
+def parse_llm_response_summary(response: str) -> Dict[str, str]:
+
+    overall_summary_match = re.search(r"Overall Summary:\s*(.+?)(?=Key Patterns:|$)", response, re.DOTALL)
+    overall_summary = overall_summary_match.group(1).strip() if overall_summary_match else "Unknown"
+
+    key_patterns_match = re.search(r"Key Patterns:\s*(.+?)(?=Impactful Highlights:|$)", response, re.DOTALL)
+    key_patterns = key_patterns_match.group(1).strip() if key_patterns_match else "Unknown"
+
+    impactful_highlights_match = re.search(r"Impactful Highlights:\s*(.+?)(?=Future Suggestions:|$)", response, re.DOTALL)
+    impactful_highlights = impactful_highlights_match.group(1).strip() if impactful_highlights_match else "Unknown"
+
+    future_suggestions_match = re.search(r"Future Suggestions:\s*(.+?)(?=$)", response, re.DOTALL)
+    future_suggestions = future_suggestions_match.group(1).strip() if future_suggestions_match else "Unknown"
+
+    return {
+        "overall_summary": overall_summary,
+        "key_patterns": key_patterns,
+        "impactful_highlights": impactful_highlights,
+        "future_suggestions": future_suggestions
+    }
+
+def parse_llm_response_moves(response: str) -> Dict[str, str]:
+
+    analysis_match = re.search(r"Analysis:\s*(.+?)(?=Trust Impact:|$)", response, re.DOTALL)
+    analysis = analysis_match.group(1).strip() if analysis_match else "Unknown"
+
+    trust_impact_match = re.search(r"Trust Impact:\s*(.+?)(?=Strategic Recommendations:|$)", response, re.DOTALL)
+    trust_impact = trust_impact_match.group(1).strip() if trust_impact_match else "Unknown"
+
+    strategic_recommendations_match = re.search(r"Strategic Recommendations:\s*(.+?)(?=$)", response, re.DOTALL)
+    strategic_recommendations = strategic_recommendations_match.group(1).strip() if strategic_recommendations_match else "Unknown"
+
+    return {
+        "analysis": analysis,
+        "trust_impact": trust_impact,
+        "strategic_recommendations": strategic_recommendations
+    }
+
 
 def save_results(results, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -172,6 +299,7 @@ def save_results(results, output_dir):
     with open(results_path, "w") as results_file:
         json.dump(results, results_file, indent=4)
     print(f"Results saved to {results_path}")
+
 
 def load_data(filepath):
     with open(filepath, "r") as file:
@@ -202,6 +330,14 @@ if __name__ == "__main__":
 
     game_data = load_data(input_file)
 
-    results = optimize_communication(game_data, ask_llm)
+    all_results = optimize_communication_moves(game_data, ask_llm)
 
-    save_results(results, output_dir)
+    summary_prompt = generate_game_summary_prompt(all_results)
+
+    summary_response = ask_llm(summary_prompt)[0]
+
+    game_summary = parse_llm_response_summary(summary_response)
+
+    all_results.append(game_summary)
+
+    save_results(all_results, output_dir)
