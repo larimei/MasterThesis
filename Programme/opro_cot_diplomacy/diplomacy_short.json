@@ -278,42 +278,18 @@
       ],
       "name": "S1901M",
       "orders": {
-        "AUSTRIA": [
-          "A VIE - GAL",
-          "F TRI - ALB",
-          "A BUD - SER"
-        ],
-        "ENGLAND": [
-          "F EDI - NTH",
-          "F LON - ENG",
-          "A LVP - YOR"
-        ],
-        "FRANCE": [
-          "F BRE - MAO",
-          "A PAR - PIC",
-          "A MAR H"
-        ],
-        "GERMANY": [
-          "F KIE - DEN",
-          "A MUN - RUH",
-          "A BER - KIE"
-        ],
-        "ITALY": [
-          "F NAP - ION",
-          "A ROM - APU",
-          "A VEN - PIE"
-        ],
+        "AUSTRIA": ["A VIE - GAL", "F TRI - ALB", "A BUD - SER"],
+        "ENGLAND": ["F EDI - NTH", "F LON - ENG", "A LVP - YOR"],
+        "FRANCE": ["F BRE - MAO", "A PAR - PIC", "A MAR H"],
+        "GERMANY": ["F KIE - DEN", "A MUN - RUH", "A BER - KIE"],
+        "ITALY": ["F NAP - ION", "A ROM - APU", "A VEN - PIE"],
         "RUSSIA": [
           "F STP/SC - BOT",
           "A MOS - UKR",
           "A WAR - GAL",
           "F SEV - BLA"
         ],
-        "TURKEY": [
-          "F ANK - BLA",
-          "A SMY H",
-          "A CON - BUL"
-        ]
+        "TURKEY": ["F ANK - BLA", "A SMY H", "A CON - BUL"]
       },
       "results": {},
       "state": {
@@ -348,80 +324,22 @@
           }
         },
         "centers": {
-          "AUSTRIA": [
-            "VIE",
-            "TRI",
-            "BUD"
-          ],
-          "ENGLAND": [
-            "EDI",
-            "LON",
-            "LVP"
-          ],
-          "FRANCE": [
-            "BRE",
-            "PAR",
-            "MAR"
-          ],
-          "GERMANY": [
-            "KIE",
-            "MUN",
-            "BER"
-          ],
-          "ITALY": [
-            "NAP",
-            "ROM",
-            "VEN"
-          ],
-          "RUSSIA": [
-            "STP",
-            "MOS",
-            "WAR",
-            "SEV"
-          ],
-          "TURKEY": [
-            "ANK",
-            "SMY",
-            "CON"
-          ]
+          "AUSTRIA": ["VIE", "TRI", "BUD"],
+          "ENGLAND": ["EDI", "LON", "LVP"],
+          "FRANCE": ["BRE", "PAR", "MAR"],
+          "GERMANY": ["KIE", "MUN", "BER"],
+          "ITALY": ["NAP", "ROM", "VEN"],
+          "RUSSIA": ["STP", "MOS", "WAR", "SEV"],
+          "TURKEY": ["ANK", "SMY", "CON"]
         },
         "homes": {
-          "AUSTRIA": [
-            "BUD",
-            "TRI",
-            "VIE"
-          ],
-          "ENGLAND": [
-            "EDI",
-            "LON",
-            "LVP"
-          ],
-          "FRANCE": [
-            "BRE",
-            "MAR",
-            "PAR"
-          ],
-          "GERMANY": [
-            "BER",
-            "KIE",
-            "MUN"
-          ],
-          "ITALY": [
-            "NAP",
-            "ROM",
-            "VEN"
-          ],
-          "RUSSIA": [
-            "MOS",
-            "SEV",
-            "STP",
-            "WAR"
-          ],
-          "TURKEY": [
-            "ANK",
-            "CON",
-            "SMY"
-          ]
+          "AUSTRIA": ["BUD", "TRI", "VIE"],
+          "ENGLAND": ["EDI", "LON", "LVP"],
+          "FRANCE": ["BRE", "MAR", "PAR"],
+          "GERMANY": ["BER", "KIE", "MUN"],
+          "ITALY": ["NAP", "ROM", "VEN"],
+          "RUSSIA": ["MOS", "SEV", "STP", "WAR"],
+          "TURKEY": ["ANK", "CON", "SMY"]
         },
         "name": "S1901M",
         "retreats": {
@@ -434,42 +352,278 @@
           "TURKEY": {}
         },
         "units": {
-          "AUSTRIA": [
-            "A VIE",
-            "F TRI",
-            "A BUD"
-          ],
-          "ENGLAND": [
-            "F EDI",
-            "F LON",
-            "A LVP"
-          ],
-          "FRANCE": [
-            "F BRE",
-            "A PAR",
-            "A MAR"
-          ],
-          "GERMANY": [
-            "F KIE",
-            "A MUN",
-            "A BER"
-          ],
-          "ITALY": [
-            "F NAP",
-            "A ROM",
-            "A VEN"
-          ],
-          "RUSSIA": [
-            "F STP/SC",
-            "A MOS",
-            "A WAR",
-            "F SEV"
-          ],
-          "TURKEY": [
-            "F ANK",
-            "A SMY",
-            "A CON"
-          ]
+          "AUSTRIA": ["A VIE", "F TRI", "A BUD"],
+          "ENGLAND": ["F EDI", "F LON", "A LVP"],
+          "FRANCE": ["F BRE", "A PAR", "A MAR"],
+          "GERMANY": ["F KIE", "A MUN", "A BER"],
+          "ITALY": ["F NAP", "A ROM", "A VEN"],
+          "RUSSIA": ["F STP/SC", "A MOS", "A WAR", "F SEV"],
+          "TURKEY": ["F ANK", "A SMY", "A CON"]
+        }
+      }
+    },
+    {
+      "logs": [],
+      "messages": [
+        {
+          "message": "Thanks for the move to Den!",
+          "phase": "F1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180339700
+        },
+        {
+          "message": "Why didn't you move to Arm?",
+          "phase": "F1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180339701
+        },
+        {
+          "message": "Are you going after France?",
+          "phase": "F1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180339800
+        },
+        {
+          "message": "Thanks! How do you want to proceed from here? Do you think you'll take Rum with the army?",
+          "phase": "F1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180340200
+        },
+        {
+          "message": "I decided not to. ",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180340700
+        },
+        {
+          "message": "I'm considering it. I thought it would slow them down a little to move to Piedmont",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ITALY",
+          "time_sent": 166180341800
+        },
+        {
+          "message": "yes, is that okay?",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180342900
+        },
+        {
+          "message": "done! good luck in the south now",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "GERMANY",
+          "time_sent": 166180342901
+        },
+        {
+          "message": "Fair enough. Do you think you'll move to Armenia now?",
+          "phase": "F1901M",
+          "recipient": "TURKEY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180343100
+        },
+        {
+          "message": "Makes sense. It's tough to make progress as Italy against France without help from the north",
+          "phase": "F1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180344400
+        },
+        {
+          "message": "Thanks a ton. You can actually bounce them in Sweden, since they didn't take Galicia",
+          "phase": "F1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180345300
+        },
+        {
+          "message": "Yes, that's fine. Can we keep Galicia as a DMZ this turn?",
+          "phase": "F1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180345500
+        },
+        {
+          "message": "How do you see things going with Russia and Turkey?",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ITALY",
+          "time_sent": 166180346400
+        },
+        {
+          "message": "I'm not entirely sure. The Turkey hold in Smy is a little concerning, but we'll see how things go from here.",
+          "phase": "F1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180348500
+        },
+        {
+          "message": "Yeah though you moved to GAL too haha",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "GERMANY",
+          "time_sent": 166180350200
+        },
+        {
+          "message": "yes",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180352100
+        },
+        {
+          "message": "Oh, right. My bad",
+          "phase": "F1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180352500
+        },
+        {
+          "message": "Have you made any deals with Russia or Turkey?",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "ITALY",
+          "time_sent": 166180352800
+        },
+        {
+          "message": "They asked for the bounce, and I thought it was a stronger move for both of us.",
+          "phase": "F1901M",
+          "recipient": "GERMANY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180354600
+        },
+        {
+          "message": "Thanks! Do you want me to support Ukr to Rum?",
+          "phase": "F1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180354601
+        },
+        {
+          "message": "With Russia, yes. Turkey hasn't been very responsive",
+          "phase": "F1901M",
+          "recipient": "ITALY",
+          "sender": "AUSTRIA",
+          "time_sent": 166180354900
+        },
+        {
+          "message": "that would be great",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "RUSSIA",
+          "time_sent": 166180355600
+        },
+        {
+          "message": "No, I think I'll set up to try and take Black Sea, then once I can be sure of it I will move to Armenia.",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180355800
+        },
+        {
+          "message": "Do you want support to Rumania?",
+          "phase": "F1901M",
+          "recipient": "AUSTRIA",
+          "sender": "TURKEY",
+          "time_sent": 166180356500
+        },
+        {
+          "message": "Great!",
+          "phase": "F1901M",
+          "recipient": "RUSSIA",
+          "sender": "AUSTRIA",
+          "time_sent": 166180357700
+        }
+      ],
+      "name": "F1901M",
+      "orders": {
+        "AUSTRIA": ["A VIE - BUD", "F ALB - GRE", "A SER S A UKR - RUM"],
+        "ENGLAND": ["A YOR - NWY VIA", "F NTH C A YOR - NWY", "F ENG - BEL"],
+        "FRANCE": ["F MAO - POR", "A PIC - BEL", "A MAR - SPA"],
+        "GERMANY": ["F DEN H", "A RUH - BUR", "A KIE - HOL"],
+        "ITALY": ["A PIE - MAR", "F ION - TUN", "A APU H"],
+        "RUSSIA": [
+          "F BOT - SWE",
+          "A WAR H",
+          "F SEV S A UKR - RUM",
+          "A UKR - RUM"
+        ],
+        "TURKEY": ["F ANK - CON", "A SMY H", "A BUL H"]
+      },
+      "results": {},
+      "state": {
+        "builds": {
+          "AUSTRIA": {
+            "count": 0,
+            "homes": []
+          },
+          "ENGLAND": {
+            "count": 0,
+            "homes": []
+          },
+          "FRANCE": {
+            "count": 0,
+            "homes": []
+          },
+          "GERMANY": {
+            "count": 0,
+            "homes": []
+          },
+          "ITALY": {
+            "count": 0,
+            "homes": []
+          },
+          "RUSSIA": {
+            "count": 0,
+            "homes": []
+          },
+          "TURKEY": {
+            "count": 0,
+            "homes": []
+          }
+        },
+        "centers": {
+          "AUSTRIA": ["VIE", "TRI", "BUD"],
+          "ENGLAND": ["EDI", "LON", "LVP"],
+          "FRANCE": ["BRE", "PAR", "MAR"],
+          "GERMANY": ["KIE", "MUN", "BER"],
+          "ITALY": ["NAP", "ROM", "VEN"],
+          "RUSSIA": ["STP", "MOS", "WAR", "SEV"],
+          "TURKEY": ["ANK", "SMY", "CON"]
+        },
+        "homes": {
+          "AUSTRIA": ["BUD", "TRI", "VIE"],
+          "ENGLAND": ["EDI", "LON", "LVP"],
+          "FRANCE": ["BRE", "MAR", "PAR"],
+          "GERMANY": ["BER", "KIE", "MUN"],
+          "ITALY": ["NAP", "ROM", "VEN"],
+          "RUSSIA": ["MOS", "SEV", "STP", "WAR"],
+          "TURKEY": ["ANK", "CON", "SMY"]
+        },
+        "name": "F1901M",
+        "retreats": {
+          "AUSTRIA": {},
+          "ENGLAND": {},
+          "FRANCE": {},
+          "GERMANY": {},
+          "ITALY": {},
+          "RUSSIA": {},
+          "TURKEY": {}
+        },
+        "units": {
+          "AUSTRIA": ["A VIE", "F ALB", "A SER"],
+          "ENGLAND": ["A YOR", "F NTH", "F ENG"],
+          "FRANCE": ["F MAO", "A PIC", "A MAR"],
+          "GERMANY": ["F DEN", "A RUH", "A KIE"],
+          "ITALY": ["A PIE", "F ION", "A APU"],
+          "RUSSIA": ["F BOT", "A WAR", "F SEV", "A UKR"],
+          "TURKEY": ["F ANK", "A SMY", "A BUL"]
         }
       }
     }
@@ -477,5 +631,3 @@
   "scoring_system": "sum_of_squares",
   "version": "1.0"
 }
-
-

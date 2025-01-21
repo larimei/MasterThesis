@@ -11,35 +11,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""The utility functions for prompting GPT and Google Cloud models."""
-
-import time
 
 import subprocess
+
 
 def call_ollama_local_single_prompt(
     prompt, model="llama3.1", max_decode_steps=1024, temperature=1.0
 ):
     """
     Calls the local Ollama model for a single prompt.
-    
+
     Args:
         prompt (str): The input string to be processed by the model.
         model (str): The local model name (default: "llama3.1").
         max_decode_steps (int): Maximum number of tokens to decode.
         temperature (float): Sampling temperature for response generation.
-    
+
     Returns:
         str: Model's response.
     """
     try:
         command = ["ollama", "run", "llama3.1", prompt]
 
-        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
-        output = process.stdout.decode('utf-8') 
+        output = process.stdout.decode("utf-8")
 
-        output_filtered = "\n".join([line for line in output.splitlines() if "Das Handle ist ungültig" not in line])
+        output_filtered = "\n".join(
+            [
+                line
+                for line in output.splitlines()
+                if "Das Handle ist ungültig" not in line
+            ]
+        )
 
         return output_filtered
 
@@ -52,22 +58,20 @@ def call_ollama_local_single_prompt(
         return ""
 
 
-def call_ollama_local(
-    inputs, model="llama3.1", max_decode_steps=1024, temperature=1.0
-):
+def call_ollama_local(inputs, model="llama3.1", max_decode_steps=1024, temperature=1.0):
     """
     Calls the local Ollama model for a list of input prompts.
-    
+
     Args:
         inputs (list or str): The input string or list of strings to be processed by the model.
         model (str): The local model name (default: "llama3.1").
         max_decode_steps (int): Maximum number of tokens to decode.
         temperature (float): Sampling temperature for response generation.
-    
+
     Returns:
         list: List of responses for each input prompt.
     """
-    # Sicherstellen, dass `inputs` eine Liste ist
+
     if isinstance(inputs, str):
         inputs = [inputs]
 
