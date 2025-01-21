@@ -246,26 +246,28 @@ def optimize_communication_moves(game_data, ask_llm):
 
     phases = []
     for phase in game_data["phases"]:
-        phase_name = phase.get("name", "Unknown Phase")
-        print(f"Current Phase: {phase_name}")
-
         messages = phase.get("messages", [])
-        actions = phase.get("orders", {})
 
-        phase_results = optimize_communication(messages, ask_llm, phase_name)
+        if len(messages) != 0:
+            actions = phase.get("orders", {})
 
-        prompt = generate_moves_analysis_prompt(messages, actions)
-        response = ask_llm(prompt)[0]
+            phase_name = phase.get("name", "Unknown Phase")
+            print(f"Current Phase: {phase_name}")
 
-        parsed_response = parse_llm_response_moves(response)
+            phase_results = optimize_communication(messages, ask_llm, phase_name)
 
-        phase_results_moves = {
-            "analysis": parsed_response["analysis"],
-            "trust_impact": parsed_response["trust_impact"],
-            "optimization": parsed_response["optimization"],
-        }
+            prompt = generate_moves_analysis_prompt(messages, actions)
+            response = ask_llm(prompt)[0]
 
-        phases.append({**phase_results, **phase_results_moves})
+            parsed_response = parse_llm_response_moves(response)
+
+            phase_results_moves = {
+                "analysis": parsed_response["analysis"],
+                "trust_impact": parsed_response["trust_impact"],
+                "optimization": parsed_response["optimization"],
+            }
+
+            phases.append({**phase_results, **phase_results_moves})
 
     return phases
 
@@ -273,11 +275,11 @@ def optimize_communication_moves(game_data, ask_llm):
 def parse_llm_response_message(response: str) -> Dict[str, str]:
 
     message_match = re.search(
-        r"Optimized Message[:\s]\s*(.+?)(?=Reasoning:|$)", response, re.DOTALL
+        r"Optimized Message[\s:]*([\s\S]*?)(?=Reasoning:|$)", response, re.DOTALL
     )
     message = message_match.group(1).strip() if message_match else "Unknown"
 
-    reasoning_match = re.search(r"Reasoning[:\s]\s*(.+?)(?=$)", response, re.DOTALL)
+    reasoning_match = re.search(r"Reasoning[\s:]*([\s\S]*?)(?=$)", response, re.DOTALL)
     reasoning = reasoning_match.group(1).strip() if reasoning_match else "Unknown"
 
     return {"message": message, "reasoning": reasoning}
@@ -286,7 +288,7 @@ def parse_llm_response_message(response: str) -> Dict[str, str]:
 def parse_llm_response_communication(response: str) -> Dict[str, str]:
 
     communication_tips_match = re.search(
-        r"Communication Tips[:\s]\s*(.+?)(?=Reasoning:|$)", response, re.DOTALL
+        r"Communication Tips[\s:]*([\s\S]*?)(?=Reasoning:|$)", response, re.DOTALL
     )
     communication_tips = (
         communication_tips_match.group(1).strip()
@@ -295,18 +297,20 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
     )
 
     reasoning_match = re.search(
-        r"Reasoning[:\s]\s*(.+?)(?=Optimized Messages:|$)", response, re.DOTALL
+        r"Reasoning[\s:]*([\s\S]*?)(?=Optimized Messages:|$)", response, re.DOTALL
     )
     reasoning = reasoning_match.group(1).strip() if reasoning_match else "Unknown"
 
     new_messages_match = re.search(
-        r"Optimized Messages[:\s]\s*(.+?)(?=Highlights:|$)", response, re.DOTALL
+        r"Optimized Messages[\s:]*([\s\S]*?)(?=Highlights:|$)", response, re.DOTALL
     )
     new_messages = (
         new_messages_match.group(1).strip() if new_messages_match else "Unknown"
     )
 
-    highlights_match = re.search(r"Highlights[:\s]\s*(.+?)(?=$)", response, re.DOTALL)
+    highlights_match = re.search(
+        r"Highlights[\s:]*([\s\S]*?)(?=$)", response, re.DOTALL
+    )
     highlights = highlights_match.group(1).strip() if highlights_match else "Unknown"
 
     return {
@@ -320,21 +324,21 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
 def parse_llm_response_summary(response: str) -> Dict[str, str]:
 
     overall_summary_match = re.search(
-        r"Overall Summary[:\s]\s*(.+?)(?=Key Patterns:|$)", response, re.DOTALL
+        r"Overall Summary[\s:]*([\s\S]*?)(?=Key Patterns:|$)", response, re.DOTALL
     )
     overall_summary = (
         overall_summary_match.group(1).strip() if overall_summary_match else "Unknown"
     )
 
     key_patterns_match = re.search(
-        r"Key Patterns[:\s]\s*(.+?)(?=Impactful Highlights:|$)", response, re.DOTALL
+        r"Key Patterns[\s:]*([\s\S]*?)(?=Impactful Highlights:|$)", response, re.DOTALL
     )
     key_patterns = (
         key_patterns_match.group(1).strip() if key_patterns_match else "Unknown"
     )
 
     impactful_highlights_match = re.search(
-        r"Impactful Highlights[:\s]\s*(.+?)(?=Future Suggestions:|$)",
+        r"Impactful Highlights[\s:]*([\s\S]*?)(?=Future Suggestions:|$)",
         response,
         re.DOTALL,
     )
@@ -345,7 +349,7 @@ def parse_llm_response_summary(response: str) -> Dict[str, str]:
     )
 
     future_suggestions_match = re.search(
-        r"Future Suggestions[:\s]\s*(.+?)(?=$)", response, re.DOTALL
+        r"Future Suggestions[\s:]*([\s\S]*?)(?=$)", response, re.DOTALL
     )
     future_suggestions = (
         future_suggestions_match.group(1).strip()
@@ -364,12 +368,12 @@ def parse_llm_response_summary(response: str) -> Dict[str, str]:
 def parse_llm_response_moves(response: str) -> Dict[str, str]:
 
     analysis_match = re.search(
-        r"Analysis[:\s]\s*(.+?)(?=Trust Impact:|$)", response, re.DOTALL
+        r"Analysis[\s:]*([\s\S]*?)(?=Trust Impact:|$)", response, re.DOTALL
     )
     analysis = analysis_match.group(1).strip() if analysis_match else "Unknown"
 
     trust_impact_match = re.search(
-        r"Trust Impact[:\s]\s*(.+?)(?=Optimization:|$)",
+        r"Trust Impact[\s:]*([\s\S]*?)(?=Optimization:|$)",
         response,
         re.DOTALL,
     )
@@ -378,7 +382,7 @@ def parse_llm_response_moves(response: str) -> Dict[str, str]:
     )
 
     optimization_match = re.search(
-        r"Optimization[:\s]\s*(.+?)(?=$)", response, re.DOTALL
+        r"Optimization[\s:]*([\s\S]*?)(?=$)", response, re.DOTALL
     )
     optimization = (
         optimization_match.group(1).strip() if optimization_match else "Unknown"
@@ -395,7 +399,7 @@ def save_results(results, output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_path = os.path.join(output_dir, f"diplomacy_results_{timestamp}.json")
+    results_path = os.path.join(output_dir, f"results_{timestamp}.json")
 
     with open(results_path, "w") as results_file:
         json.dump(results, results_file, indent=4)
@@ -425,14 +429,12 @@ if __name__ == "__main__":
     print("Finished testing the optimizer server.")
     print("\n=================================================")
 
-    input_file = "diplomacy_short.json"
+    input_file = "diplomacy.json"
     output_dir = "outputs"
 
     game_data = load_data(input_file)
 
     all_results = [{"phases": optimize_communication_moves(game_data, ask_llm)}]
-
-    print(all_results)
 
     summary_prompt = generate_game_summary_prompt(all_results)
 
