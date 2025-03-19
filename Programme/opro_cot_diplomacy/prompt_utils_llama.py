@@ -3,8 +3,8 @@ import requests
 import json
 from typing import List, Union, Dict, Optional
 
-# Globale Variable für die Konversationshistorie
-_conversation_histories = {}  # Speichert Geschichte pro Modell: model_name -> history
+
+_conversation_histories = {}
 
 
 def call_ollama_local_single_prompt(
@@ -15,40 +15,30 @@ def call_ollama_local_single_prompt(
 
     global _conversation_histories
 
-    # Initialisiere die History für dieses Modell falls nötig
     if model not in _conversation_histories:
         _conversation_histories[model] = []
 
     try:
-        # API-URL für Ollama
         url = "http://localhost:11434/api/chat"
 
-        # Bereite die Nachrichten vor
         messages = []
 
-        # Füge die Konversationshistorie hinzu, wenn session=True
         if session and _conversation_histories[model]:
             messages.extend(_conversation_histories[model])
 
-        # Füge den aktuellen Prompt hinzu
         messages.append({"role": "user", "content": prompt})
 
-        # Bereite die Anfrage vor
         data = {"model": model, "messages": messages, "stream": False}
 
-        # Sende die Anfrage
         response = requests.post(url, json=data, timeout=60)
 
-        # Prüfe auf HTTP-Fehler
         response.raise_for_status()
 
-        # Parse die Antwort
         result = response.json()
 
         if "message" in result and "content" in result["message"]:
             response_text = result["message"]["content"]
 
-            # Aktualisiere die Konversationshistorie, wenn session=True
             if session:
                 _conversation_histories[model].append(
                     {"role": "user", "content": prompt}
