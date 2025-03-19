@@ -1,76 +1,83 @@
-# Copyright 2023 The OPRO Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+import re
+import requests
+import json
+from typing import List, Union, Dict, Optional
 
-import subprocess
+# Globale Variable für die Konversationshistorie
+_conversation_histories = {}  # Speichert Geschichte pro Modell: model_name -> history
 
 
 def call_ollama_local_single_prompt(
-    prompt, model="llama3.1", max_decode_steps=1024, temperature=1.0
-):
-    """
-    Calls the local Ollama model for a single prompt.
+    prompt: str,
+    model: str = "deepseek-r1:8b",
+    session: bool = True,
+) -> str:
 
-    Args:
-        prompt (str): The input string to be processed by the model.
-        model (str): The local model name (default: "llama3.1").
-        max_decode_steps (int): Maximum number of tokens to decode.
-        temperature (float): Sampling temperature for response generation.
+    global _conversation_histories
 
-    Returns:
-        str: Model's response.
-    """
+    # Initialisiere die History für dieses Modell falls nötig
+    if model not in _conversation_histories:
+        _conversation_histories[model] = []
+
     try:
-        command = ["ollama", "run", "llama3.1", prompt]
+        # API-URL für Ollama
+        url = "http://localhost:11434/api/chat"
 
-        process = subprocess.run(
-            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+        # Bereite die Nachrichten vor
+        messages = []
 
-        output = process.stdout.decode("utf-8")
+        # Füge die Konversationshistorie hinzu, wenn session=True
+        if session and _conversation_histories[model]:
+            messages.extend(_conversation_histories[model])
 
-        output_filtered = "\n".join(
-            [
-                line
-                for line in output.splitlines()
-                if "Das Handle ist ungültig" not in line
-            ]
-        )
+        # Füge den aktuellen Prompt hinzu
+        messages.append({"role": "user", "content": prompt})
 
-        return output_filtered
+        # Bereite die Anfrage vor
+        data = {"model": model, "messages": messages, "stream": False}
 
-    except subprocess.CalledProcessError as e:
-        print(f"Error calling Ollama model: {e.stderr}")
-        return ""
+        # Sende die Anfrage
+        response = requests.post(url, json=data, timeout=60)
 
+        # Prüfe auf HTTP-Fehler
+        response.raise_for_status()
+
+        # Parse die Antwort
+        result = response.json()
+
+        if "message" in result and "content" in result["message"]:
+            response_text = result["message"]["content"]
+
+            # Aktualisiere die Konversationshistorie, wenn session=True
+            if session:
+                _conversation_histories[model].append(
+                    {"role": "user", "content": prompt}
+                )
+                _conversation_histories[model].append(
+                    {"role": "assistant", "content": response_text}
+                )
+
+            return response_text
+        else:
+            error_msg = f"Unerwartetes Antwortformat von der API: {json.dumps(result)}"
+            print(f"Error: {error_msg}")
+            return f"Error: {error_msg}"
+
+    except requests.exceptions.ConnectionError:
+        error_msg = "Verbindung zum Ollama-Server fehlgeschlagen. Läuft der Server? (ollama serve)"
+        print(f"Error: {error_msg}")
+        return f"Error: {error_msg}"
     except Exception as e:
-        print(f"Unexpected error: {e}")
-        return ""
+        error_msg = f"Fehler bei API-Aufruf: {str(e)}"
+        print(f"Error: {error_msg}")
+        return f"Error: {error_msg}"
 
 
-def call_ollama_local(inputs, model="llama3.1", max_decode_steps=1024, temperature=1.0):
-    """
-    Calls the local Ollama model for a list of input prompts.
-
-    Args:
-        inputs (list or str): The input string or list of strings to be processed by the model.
-        model (str): The local model name (default: "llama3.1").
-        max_decode_steps (int): Maximum number of tokens to decode.
-        temperature (float): Sampling temperature for response generation.
-
-    Returns:
-        list: List of responses for each input prompt.
-    """
+def call_ollama_local(
+    inputs: Union[str, List[str]],
+    model: str = "deepseek-r1:8b",
+    session: bool = True,
+) -> List[str]:
 
     if isinstance(inputs, str):
         inputs = [inputs]
@@ -80,8 +87,35 @@ def call_ollama_local(inputs, model="llama3.1", max_decode_steps=1024, temperatu
         output = call_ollama_local_single_prompt(
             input_str,
             model=model,
-            max_decode_steps=max_decode_steps,
-            temperature=temperature,
+            session=session,
         )
         outputs.append(output)
     return outputs
+
+
+def clear_conversation_history(model: Optional[str] = None):
+
+    global _conversation_histories
+
+    if model is None:
+        _conversation_histories = {}
+        print("Konversationshistorie für alle Modelle gelöscht.")
+    elif model in _conversation_histories:
+        _conversation_histories[model] = []
+        print(f"Konversationshistorie für Modell '{model}' gelöscht.")
+    else:
+        print(f"Keine Konversationshistorie für Modell '{model}' gefunden.")
+
+
+def get_conversation_history(
+    model: Optional[str] = None,
+) -> Union[Dict[str, List[Dict[str, str]]], List[Dict[str, str]]]:
+
+    global _conversation_histories
+
+    if model is None:
+        return _conversation_histories
+    elif model in _conversation_histories:
+        return _conversation_histories[model]
+    else:
+        return []
