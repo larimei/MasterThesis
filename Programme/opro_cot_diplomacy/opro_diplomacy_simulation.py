@@ -62,7 +62,8 @@ def parse_llm_response(response: str, pattern_dict: Dict[str, str]) -> Dict[str,
 def parse_llm_response_communication(response: str) -> Dict[str, str]:
     pattern_dict = {
         "DIPLOMACY-SECTION-COMMUNICATION-TIPS": "DIPLOMACY-SECTION-REASONING:",
-        "DIPLOMACY-SECTION-REASONING": "DIPLOMACY-SECTION-OPTIMIZED-MESSAGES:",
+        "DIPLOMACY-SECTION-REASONING": "DIPLOMACY-SECTION-SIMPLIFIED-SUMMARY:",
+        "DIPLOMACY-SECTION-SIMPLIFIED-SUMMARY": "DIPLOMACY-SECTION-OPTIMIZED-MESSAGES:",
         "DIPLOMACY-SECTION-OPTIMIZED-MESSAGES": "DIPLOMACY-SECTION-HIGHLIGHTS:",
         "DIPLOMACY-SECTION-HIGHLIGHTS": "$",
     }
@@ -70,6 +71,7 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
     return {
         "communication_tips": result.get("diplomacy_section_communication_tips", ""),
         "reasoning": result.get("diplomacy_section_reasoning", ""),
+        "simplified_summary": result.get("diplomacy_section_simplified_summary", ""),
         "optimized_messages": result.get("diplomacy_section_optimized_messages", ""),
         "highlights": result.get("diplomacy_section_highlights", ""),
     }
@@ -78,13 +80,15 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
 def parse_llm_response_moves(response: str) -> Dict[str, str]:
     """Parse moves analysis responses"""
     pattern_dict = {
-        "DIPLOMACY-SECTION-ANALYSIS": "DIPLOMACY-SECTION-TRUST-IMPACT:",
+        "DIPLOMACY-SECTION-ANALYSIS": "DIPLOMACY-SECTION-MOVES-SUMMARY:",  # Geändert
+        "DIPLOMACY-SECTION-MOVES-SUMMARY": "DIPLOMACY-SECTION-TRUST-IMPACT:",  # Geändert
         "DIPLOMACY-SECTION-TRUST-IMPACT": "DIPLOMACY-SECTION-OPTIMIZATION:",
         "DIPLOMACY-SECTION-OPTIMIZATION": "$",
     }
     result = parse_llm_response(response, pattern_dict)
     return {
         "analysis": result.get("diplomacy_section_analysis", ""),
+        "moves_summary": result.get("diplomacy_section_moves_summary", ""),  # Geändert
         "trust_impact": result.get("diplomacy_section_trust_impact", ""),
         "optimization": result.get("diplomacy_section_optimization", ""),
     }
@@ -93,7 +97,8 @@ def parse_llm_response_moves(response: str) -> Dict[str, str]:
 def parse_llm_response_summary(response: str) -> Dict[str, str]:
     """Parse game summary responses"""
     pattern_dict = {
-        "DIPLOMACY-SECTION-OVERALL-SUMMARY": "DIPLOMACY-SECTION-KEY-PATTERNS:",
+        "DIPLOMACY-SECTION-OVERALL-SUMMARY": "DIPLOMACY-SECTION-GAME-SUMMARY:",  # Geändert
+        "DIPLOMACY-SECTION-GAME-SUMMARY": "DIPLOMACY-SECTION-KEY-PATTERNS:",  # Geändert
         "DIPLOMACY-SECTION-KEY-PATTERNS": "DIPLOMACY-SECTION-IMPACTFUL-HIGHLIGHTS:",
         "DIPLOMACY-SECTION-IMPACTFUL-HIGHLIGHTS": "DIPLOMACY-SECTION-FUTURE-SUGGESTIONS:",
         "DIPLOMACY-SECTION-FUTURE-SUGGESTIONS": "$",
@@ -101,6 +106,7 @@ def parse_llm_response_summary(response: str) -> Dict[str, str]:
     result = parse_llm_response(response, pattern_dict)
     return {
         "overall_summary": result.get("diplomacy_section_overall_summary", ""),
+        "game_summary": result.get("diplomacy_section_game_summary", ""),  # Geändert
         "key_patterns": result.get("diplomacy_section_key_patterns", ""),
         "impactful_highlights": result.get(
             "diplomacy_section_impactful_highlights", ""
@@ -125,10 +131,12 @@ Your task:
 2. Ensure the rewritten message is subtle and strategic.
 3. Explain step-by-step why your changes improve the effectiveness of the message and how you came to this explanation.
 4. Ensure your explanation points out the risks and the enhancements you made.
+5. Provide a simple, structured summary of your reasoning with bullet points, focusing on the main improvements and why they matter.
 
 Output format (IMPORTANT - always use these exact section headers without markdown or ther sybols befor or after the header):
 - DIPLOMACY-SECTION-OPTIMIZED-MESSAGE: [Your rewritten message]
-- DIPLOMACY-SECTION-REASONING: [Explanation of why this rewrite improves persuasion and cooperation]
+- DIPLOMACY-SECTION-REASONING: [Detailed explanation of why this rewrite improves persuasion and cooperation]
+- DIPLOMACY-SECTION-SIMPLIFIED-SUMMARY: [A bullet-point summary of the main improvements. First write a 1-2 sentence general assessment, then list 3-5 bullet points starting with '*' about specific improvements and why they matter. End with a concluding sentence about the overall impact.]
 
 Your response must follow this format exactly, so the information can be parsed and processed for further analysis.
 """,
@@ -145,11 +153,13 @@ Your task:
    this conclusion.
 4. Identify key sentences, exchanges, or patterns that had a significant influence on the decision-making process during this phase. Explain why these sentences were pivotal and how they shaped the players' actions or strategies.
    Discuss any implicit or explicit agreements, power dynamics, or promises reflected in the messages.
+5. Provide a structured bullet-point summary of your analysis that is easy to understand for anyone. Start with a brief overview of the situation, then list the main issues and recommendations as bullet points, and end with a conclusion.
 
 Output format (IMPORTANT - always use these exact section headers without markdown or ther sybols befor or after the header)):
  
 - DIPLOMACY-SECTION-COMMUNICATION-TIPS: [List of actionable tips to improve overall communication in this phase. Detailed explanation of the patterns, their strategic impact, and how the communication can be improved.]
 - DIPLOMACY-SECTION-REASONING: [Detailed explanation of the patterns and their strategic impact, including the explanation of the improvement for the messages]
+- DIPLOMACY-SECTION-SIMPLIFIED-SUMMARY: [Start with 1-2 sentences summarizing the key issue. Then list 3-5 bullet points starting with '*' that highlight the main problems and recommendations. End with a concluding sentence about how these changes would improve the player's position.]
 - DIPLOMACY-SECTION-OPTIMIZED-MESSAGES: [Examples of improved communication for this phase]
 - DIPLOMACY-SECTION-HIGHLIGHTS: [List of key sentences or phrases that significantly influence the game's outcome. Also explain exactly and step-by-step why this is a key sentence and can change the outcome of the game]
 
@@ -157,6 +167,7 @@ Important:
 - Provide detailed step-by-step explanations for all analyses and suggestions and always explain your decisions for your solutions.
 - Ensure that all critical points are backed by reasoning, highlighting the context and implications of each message.
 - Write your response in a clear, structured, and logical format that adheres to the requested output format.
+- In the simplified summary, use everyday language, avoid game jargon, and focus on clear actionable points.
 - Ensure that the order is exactly as written.
 """,
         "moves_analysis": """
@@ -172,9 +183,11 @@ Your task:
 1. Analyze how the players' moves align or conflict with their messages and Identify discrepancies or consistencies between promises and actions.
 2. Evaluate how these moves influence trust, strategy, and cooperation for the next phase.
 3. Explain optimization in communication, with the insights you gained by the orders the actions the players made step-by-step. Also explain your decision making in the long-term-process.
+4. Provide a structured bullet-point summary that clearly explains your analysis in simple terms.
 
 Output format (IMPORTANT - always use these exact section headers without markdown or ther sybols befor or after the header):
 - DIPLOMACY-SECTION-ANALYSIS: [Detailed explanation of the alignment or conflict between messages and moves]
+- DIPLOMACY-SECTION-MOVES-SUMMARY: [Start with 1-2 sentences describing the situation. Then list 3-5 bullet points starting with '*' highlighting the main insights about the alignment between messages and moves. End with a sentence about the overall impact on the game.]
 - DIPLOMACY-SECTION-TRUST-IMPACT: [How the moves affect trust between players]
 - DIPLOMACY-SECTION-OPTIMIZATION: [Detailed Optimization of the player's communication]
 
@@ -203,8 +216,14 @@ Your goals:
    - Provide clear recommendations for improving communication in similar scenarios.
    - Focus on building trust, enhancing negotiation skills, and aligning communication with strategic objectives.
 
+5. Provide a structured bullet-point summary:
+   - Create a simplified summary that captures the essence of your analysis
+   - Use clear, everyday language without game jargon
+   - Structure it with bullet points to highlight key issues and recommendations
+
 Output format (IMPORTANT - always use these exact section headers without markdown or ther sybols befor or after the header):
 - DIPLOMACY-SECTION-OVERALL-SUMMARY: [Your summary of the game's communication, highlights and strategies, written in clear, logical sentences. Explain all your optimization and make a transparent explanation of how you came to this decision. Summarize the whole game and deliver clear, transparent and logical main points.]
+- DIPLOMACY-SECTION-GAME-SUMMARY: [Start with 1-2 sentences describing the overall game pattern. Then list 4-6 bullet points starting with '*' that highlight the main issues and recommendations from the game. End with a concluding sentence about the key lesson from this analysis.]
 - DIPLOMACY-SECTION-KEY-PATTERNS: [Patterns or improvements observed across phases, explained with specific examples.]
 - DIPLOMACY-SECTION-IMPACTFUL-HIGHLIGHTS: [List and explain the most impactful highlights step-by-step, focusing on why they were crucial and how they shaped the game's outcome.]
 - DIPLOMACY-SECTION-FUTURE-SUGGESTIONS: [Practical recommendations for improving communication and strategic decision-making in future games.]
@@ -213,6 +232,7 @@ Important:
 - Provide step-by-step explanations for each analysis to ensure clarity and transparency.
 - Use precise, complete sentences to explain each point thoroughly.
 - Avoid vague statements; back up each claim with reasoning or examples from the provided phase results.
+- Make sure the simplified summary uses everyday language and focuses on actionable points.
 - Ensure your response adheres to the exact output format for structured and actionable insights.
 """,
     }
@@ -240,6 +260,7 @@ def optimize_communication(messages: List[Dict], ask_llm, phase_name: str) -> Di
             "phase": phase_name,
             "communication_tips": "No messages to analyze",
             "reasoning": "No messages to analyze",
+            "simplified_summary": "No messages were available for analysis.",
             "new_messages": "No messages to optimize",
             "highlights": "No messages to highlight",
         }
@@ -263,6 +284,7 @@ def optimize_communication(messages: List[Dict], ask_llm, phase_name: str) -> Di
             "phase": phase_name,
             "communication_tips": parsed_response["communication_tips"],
             "reasoning": parsed_response["reasoning"],
+            "simplified_summary": parsed_response["simplified_summary"],
             "new_messages": parsed_response["optimized_messages"],
             "highlights": parsed_response["highlights"],
         }
@@ -274,6 +296,7 @@ def optimize_communication(messages: List[Dict], ask_llm, phase_name: str) -> Di
             "phase": phase_name,
             "communication_tips": f"Error during analysis: {str(e)}",
             "reasoning": "Error during analysis",
+            "simplified_summary": "An error occurred during the analysis process.",
             "new_messages": "Error during optimization",
             "highlights": "Error during highlight extraction",
         }
@@ -288,6 +311,8 @@ def generate_game_summary(results: List[Dict], ask_llm) -> Dict:
         highlights = phase.get("highlights", "")
         communication_tips = phase.get("communication_tips", "")
         reasoning = phase.get("reasoning", "")
+        simplified_summary = phase.get("simplified_summary", "")
+        moves_summary = phase.get("moves_summary", "")  # Geändert
 
         phase_summaries.append(
             f"""
@@ -300,6 +325,12 @@ Communication Tips:
 
 Reasoning:
 {reasoning}
+
+Communication Summary:
+{simplified_summary}
+
+Moves Summary:
+{moves_summary}
 """
         )
 
@@ -360,17 +391,19 @@ def process_game_data(game_data: Dict, ask_llm, iterations: int = 1) -> List[Dic
 
 
 def save_results(results: List[Dict], output_dir: str) -> str:
-
     os.makedirs(output_dir, exist_ok=True)
-
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_path = os.path.join(output_dir, f"results_{timestamp}.json")
 
+    phases_path = os.path.join(output_dir, f"results_phases_{timestamp}.json")
     try:
-        with open(results_path, "w", encoding="utf-8") as results_file:
-            json.dump(results, results_file, indent=2, ensure_ascii=False)
-        print(f"Results successfully saved to {results_path}")
-        return results_path
+        with open(phases_path, "w", encoding="utf-8") as phases_file:
+            json.dump([results[0]], phases_file, indent=2, ensure_ascii=False)
+
+        if len(results) > 1:
+            summary_path = os.path.join(output_dir, f"results_summary_{timestamp}.json")
+            with open(summary_path, "w", encoding="utf-8") as summary_file:
+                json.dump([results[1]], summary_file, indent=2, ensure_ascii=False)
+
     except Exception as e:
         print(f"Error saving results: {str(e)}")
         # Try saving to a different location as fallback
@@ -379,6 +412,9 @@ def save_results(results: List[Dict], output_dir: str) -> str:
             json.dump(results, fallback_file, indent=2, ensure_ascii=False)
         print(f"Results saved to fallback location: {fallback_path}")
         return fallback_path
+
+    print(f"Results successfully saved to {output_dir}")
+    return output_dir
 
 
 def load_data(filepath: str) -> Dict:
@@ -395,7 +431,6 @@ def load_data(filepath: str) -> Dict:
 
 
 def main():
-
     LLM_MODEL = "deepseek-r1:8b"
     ITERATIONS = 1
 
@@ -408,7 +443,7 @@ def main():
 
     input_file = (
         input("Enter the input JSON file path (default: diplomacy.json): ")
-        or "diplomacy_short.json"
+        or "diplomacy.json"
     )
     output_dir = input("Enter output directory (default: outputs): ") or "outputs"
 
