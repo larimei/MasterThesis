@@ -443,7 +443,7 @@ def main():
 
     input_file = (
         input("Enter the input JSON file path (default: diplomacy.json): ")
-        or "diplomacy.json"
+        or "game_433761_ENGLAND_AG.json"
     )
     output_dir = input("Enter output directory (default: outputs): ") or "outputs"
 
