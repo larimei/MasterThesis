@@ -28,7 +28,9 @@ def parse_llm_response(response: str, pattern_dict: Dict[str, str]) -> Dict[str,
 
     import os
 
-    debug_dir = "debug_outputs"
+    debug_dir = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "debug_outputs"
+    )
     os.makedirs(debug_dir, exist_ok=True)
 
     import datetime
