@@ -1,0 +1,13 @@
+digraph OptimizationProcess {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+
+    DefineProblem [label="Definition of the optimization problem\n(natural language)", fillcolor="#e6f2ff"]; // hellblau
+    Initialization [label="Initialization\n(e.g., initial solutions)", fillcolor="#f0f8ff"]; // noch helleres blau
+    IterativeSearch [label="Iterative solution search\n Generate and evaluate new solutions", fillcolor="#e6ffe6"]; // sehr helles grün
+    Finish [label="Finish optimization\n(convergence or max steps reached)", fillcolor="#ffe6e6"]; // sehr helles rot/rosa
+
+    DefineProblem -> Initialization;
+    Initialization -> IterativeSearch;
+    IterativeSearch -> Finish;
+}

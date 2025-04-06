@@ -1,0 +1,17 @@
+digraph PromptArchitecture {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+
+    ContextFraming [label="1. Context Framing\n Establishes the strategic context\n  for the optimization task", fillcolor="#e6f2ff"]; // sehr helles Blau
+    TaskDefinition [label="2. Task Definition\n Clearly specifies what the\n  LLM is being asked to do", fillcolor="#e6ffe6"]; // sehr helles Grün
+    OutputStructure [label="3. Output Structure\n Defines the required\n  format for model outputs", fillcolor="#fff0f5"]; // sehr helles Rosa
+    ExplanationRequirements [label="4. Explanation Requirements\n Requests reasoning and\n  justification for recommendations", fillcolor="#ffebeb"]; // sehr helles Koralle-Rosa
+
+    ContextFraming -> TaskDefinition;
+    TaskDefinition -> OutputStructure;
+    TaskDefinition -> ExplanationRequirements;
+    OutputStructure -> ExplanationRequirements;
+
+    // Group OutputStructure and ExplanationRequirements on same level
+    { rank=same; OutputStructure; ExplanationRequirements }
+}

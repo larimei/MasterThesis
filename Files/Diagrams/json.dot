@@ -1,0 +1,28 @@
+digraph json_structure {
+   // Graph-wide settings
+   rankdir=TB;
+   fontname="Arial Bold";
+   
+   // Title setup
+   label="Diplomacy Game JSON Data Structure";
+   labelloc="t";
+   fontsize=16;
+
+   // Node styles
+   node [shape=record, style=filled, fillcolor="#f0f0f0"];
+   
+   game_root [label="{Game Root|+ id: string\l+ is_full_press: boolean\l+ map: string\l+ scoring_system: string\l+ version: string\l+phases: Phase[]\l}"];
+   
+   metadata [label="{Metadata|+ phase_minutes: string\l}"];
+   
+   phase [label="{Phase|+ name: string\l+ logs: Array\l+ messages: Message[]\l+ state: State\l+ orders: Object[]\l+ results: Object[]\l }"];
+   
+   message [label="{Message|+ message: string\l+ phase: string\l+ recipient: string\l+ sender: string\l+ time_sent: integer\l}"];
+   
+   state [label="{State|+ name: string\l+ builds: Object[]\l+ centers: Object[]\l+ homes: Object[]\l+ retreats: Object[]\l+ units: Object[]\l}"];
+   
+   game_root -> metadata;
+   game_root -> phase;
+   phase -> message;
+   phase -> state;
+}

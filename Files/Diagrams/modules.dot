@@ -1,0 +1,17 @@
+digraph OptimizationFlow {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+
+    InputProcessing [label="1. Input Processing Module\n Parses game state and messages", fillcolor="#e6f2ff"]; // sehr helles Blau
+
+    CommunicationOptimization [label="2. Communication Optimization Module\n Uses LLMs to improve communication", fillcolor="#e6ffe6"]; // sehr helles Grün
+
+    ExplanationGeneration [label="3. Explanation Generation Module\n Explains the optimization process", fillcolor="#ffffe6"]; // sehr helles Gelb
+
+    OutputGeneration [label="4. Output Generation Module\n Stores results in JSON format", fillcolor="#ffe6e6"]; // sehr helles Rosa
+
+    InputProcessing -> CommunicationOptimization;
+    CommunicationOptimization -> ExplanationGeneration;
+    ExplanationGeneration -> OutputGeneration;
+
+}
