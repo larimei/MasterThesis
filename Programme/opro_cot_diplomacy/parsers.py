@@ -7,6 +7,11 @@ from typing import Dict, List
 def parse_llm_response(response: str, pattern_dict: Dict[str, str]) -> Dict[str, str]:
     result = {}
 
+    # Extract thinking section first if present
+    thinking_content = extract_thinking(response)
+    if thinking_content:
+        result["thinking"] = thinking_content
+
     for section_name, next_section in pattern_dict.items():
         print(f"Looking for section: {section_name} until {next_section}")
 
@@ -51,13 +56,20 @@ def parse_llm_response_communication(response: str) -> Dict[str, str]:
         "DIPLOMACY-SECTION-HIGHLIGHTS": "$",
     }
     result = parse_llm_response(response, pattern_dict)
-    return {
+
+    parsed_result = {
         "communication_tips": result.get("diplomacy_section_communication_tips", ""),
         "reasoning": result.get("diplomacy_section_reasoning", ""),
         "simplified_summary": result.get("diplomacy_section_simplified_summary", ""),
         "optimized_messages": result.get("diplomacy_section_optimized_messages", ""),
         "highlights": result.get("diplomacy_section_highlights", ""),
     }
+
+    # Add thinking if present
+    if "thinking" in result:
+        parsed_result["thinking"] = result["thinking"]
+
+    return parsed_result
 
 
 def parse_llm_response_moves(response: str) -> Dict[str, str]:
@@ -68,12 +80,19 @@ def parse_llm_response_moves(response: str) -> Dict[str, str]:
         "DIPLOMACY-SECTION-OPTIMIZATION": "$",
     }
     result = parse_llm_response(response, pattern_dict)
-    return {
+
+    parsed_result = {
         "analysis": result.get("diplomacy_section_analysis", ""),
         "moves_summary": result.get("diplomacy_section_moves_summary", ""),
         "trust_impact": result.get("diplomacy_section_trust_impact", ""),
         "optimization": result.get("diplomacy_section_optimization", ""),
     }
+
+    # Add thinking if present
+    if "thinking" in result:
+        parsed_result["thinking"] = result["thinking"]
+
+    return parsed_result
 
 
 def parse_llm_response_summary(response: str) -> Dict[str, str]:
@@ -85,7 +104,8 @@ def parse_llm_response_summary(response: str) -> Dict[str, str]:
         "DIPLOMACY-SECTION-FUTURE-SUGGESTIONS": "$",
     }
     result = parse_llm_response(response, pattern_dict)
-    return {
+
+    parsed_result = {
         "overall_summary": result.get("diplomacy_section_overall_summary", ""),
         "game_summary": result.get("diplomacy_section_game_summary", ""),
         "key_patterns": result.get("diplomacy_section_key_patterns", ""),
@@ -94,3 +114,20 @@ def parse_llm_response_summary(response: str) -> Dict[str, str]:
         ),
         "future_suggestions": result.get("diplomacy_section_future_suggestions", ""),
     }
+
+    # Add thinking if present
+    if "thinking" in result:
+        parsed_result["thinking"] = result["thinking"]
+
+    return parsed_result
+
+
+def extract_thinking(response: str) -> str:
+    thinking_pattern = r"<think>([\s\S]*?)<\/think>"
+    thinking_match = re.search(thinking_pattern, response, re.DOTALL)
+
+    if thinking_match and thinking_match.group(1):
+        thinking_content = thinking_match.group(1).strip()
+        print(f"Found 'thinking' section with {len(thinking_content)} chars")
+        return thinking_content
+    return ""

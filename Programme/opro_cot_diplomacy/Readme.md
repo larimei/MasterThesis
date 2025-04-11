@@ -18,7 +18,7 @@ This tool provides an advanced analysis of Diplomacy game communications, utiliz
 
 ```bash
 git clone https://github.com/larimei/MasterThesis
-cd opro_cot_diplomacy
+cd Programme/opro_cot_diplomacy
 ```
 
 ### 2. Create Virtual Environment
@@ -30,12 +30,13 @@ python -m venv diplomacy_env
 diplomacy_env\Scripts\activate
 ```
 
-### 3. Install Ollama
+### 3. Install Ollama or add Gemini key
 
-#### Windows/macOS
+#### Windows
 
 1. Download from [Ollama Official Website](https://ollama.com/download)
 2. Follow installation instructions
+3. Add Gemini Key in prompt_utils.py
 
 ### 4. Pull Language Model
 

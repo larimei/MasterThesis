@@ -1,9 +1,10 @@
-from typing import Dict, List, Callable
+from typing import Dict, List, Callable, Tuple, Optional
 
 from parsers import (
     parse_llm_response_communication,
     parse_llm_response_moves,
     parse_llm_response_summary,
+    extract_thinking,
 )
 from prompts import generate_prompt
 
@@ -43,10 +44,11 @@ def optimize_communication(
     )
 
     try:
+        # Use original ask_llm function but unpack the first item only
         response = ask_llm(prompt)[0]
         parsed_response = parse_llm_response_communication(response)
 
-        return {
+        result = {
             "phase": phase_name,
             "communication_tips": parsed_response["communication_tips"],
             "reasoning": parsed_response["reasoning"],
@@ -54,6 +56,12 @@ def optimize_communication(
             "new_messages": parsed_response["optimized_messages"],
             "highlights": parsed_response["highlights"],
         }
+
+        # Add thinking if present
+        if "thinking" in parsed_response:
+            result["thinking"] = parsed_response["thinking"]
+
+        return result
     except Exception as e:
         print(
             f"Error during communication optimization for phase {phase_name}: {str(e)}"

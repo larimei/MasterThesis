@@ -28,7 +28,7 @@ def main():
         else "llama3.1"
     )
 
-    model_options = "/".join(provider_models.get(provider_input, ["deepseek-r1:8b"]))
+    model_options = "/".join(provider_models.get(provider_input, ["llama3.1:8b"]))
     model_prompt = f"Enter {provider_input.capitalize()} model ({model_options}, default: {default_model}): "
     model_input = input(model_prompt).strip() or default_model
 
@@ -48,9 +48,9 @@ def main():
         or "diplomacy.json"
     )
 
-    output_dir = input("Enter output directory (default: outputs): ") or "outputs"
+    output = input("Enter output directory (default: outputs): ") or "outputs"
 
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), output_dir)
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), output)
 
     try:
         print(f"Loading data from {input_file}...")
@@ -65,7 +65,9 @@ def main():
         game_summary = processing.generate_game_summary(all_results, ask_llm)
         all_results.append(game_summary)
 
-        results_path = data_handler.save_results(all_results, output_dir)
+        results_path = data_handler.save_results(
+            all_results, output_dir, model_input, input_file
+        )
         print(f"All processing complete! Results saved to: {results_path}")
 
     except Exception as e:
